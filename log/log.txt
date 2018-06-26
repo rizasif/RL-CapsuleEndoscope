@@ -1,2 +1,1 @@
 Logging to ./log
-********** Iteration 0 ************
