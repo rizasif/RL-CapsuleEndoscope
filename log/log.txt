@@ -1,3 +1,2 @@
 Logging to ./log
-Model loaded from file ./ori_train/train_ori.ckpt
 ********** Iteration 0 ************

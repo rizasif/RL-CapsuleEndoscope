@@ -1,5 +1,5 @@
 
-FILE_NAME = "data.txt"
+FILE_NAME = "./training_data/data.txt"
 
 class Parser():
 

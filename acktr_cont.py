@@ -17,7 +17,8 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
     ob = env.reset()
     prev_ob = np.float32(np.zeros(ob.shape))
     #prev_ob = np.int32(np.zeros(ob.shape))
-    if obfilter: ob = obfilter(ob)
+    if obfilter:
+        ob = obfilter(ob)
     terminated = False
 
     obs = []

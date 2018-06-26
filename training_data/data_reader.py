@@ -1,5 +1,5 @@
-from data_parser import Parser
-# from .data_parser import Parser
+# from data_parser import Parser
+from .data_parser import Parser
 import numpy as np
 
 class DataReader():
