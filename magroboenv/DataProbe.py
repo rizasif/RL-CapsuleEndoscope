@@ -362,6 +362,9 @@ class MProbe():
     def get_last_config(self):
         return self.last_config
 
+    def get_config(self):
+        return self.config
+
 
 #---------------------------------
 DR = DataReader()

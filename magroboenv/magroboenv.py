@@ -216,12 +216,12 @@ class MagRoboEnv(gym.Env):
         #print("goal: ({}, {}, {})".format(MProbe.goal.coordinate.x, MProbe.goal.coordinate.y, MProbe.goal.coordinate.z))
         # logging.debug("distance:{} {}".format(self.curr_dist, self.curr_moment_dist))
 
-        goal_config = MProbe.goal.read_sys_configuration()
+        goal_config = MProbe.goal.get_config()
         last_config = MProbe.goal.get_last_config()
         assert(not goal_config == last_config)
 
-        goal_curr = goal_config[len(goal_config)-9 : len(goal_config)]
-        last_curr = last_config[len(last_config)-9 : len(last_config)]
+        goal_curr = goal_config[len(goal_config)-9 :]
+        last_curr = last_config[len(last_config)-9 :]
         slave_curr = MProbe.desired_current.read_sys_current()
 
         num = Utils.find_currents_distance(last_curr, slave_curr)
