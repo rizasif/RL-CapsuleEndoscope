@@ -216,7 +216,6 @@ class MagRoboEnv(gym.Env):
         #print("goal: ({}, {}, {})".format(MProbe.goal.coordinate.x, MProbe.goal.coordinate.y, MProbe.goal.coordinate.z))
         # logging.debug("distance:{} {}".format(self.curr_dist, self.curr_moment_dist))
 
-        # num = MProbe.goal.find_moment_distance(MProbe.slave)
         goal_config = MProbe.goal.read_sys_configuration()
         last_config = MProbe.goal.get_last_config()
         assert(not goal_config == last_config)
@@ -225,12 +224,12 @@ class MagRoboEnv(gym.Env):
         last_curr = last_config[len(last_config)-9 : len(last_config)]
         slave_curr = MProbe.desired_current.read_sys_current()
 
-        num = Utils.find_currents_distance(goal_curr, slave_curr)
+        num = Utils.find_currents_distance(last_curr, slave_curr)
         dnum = Utils.find_currents_distance(goal_curr, last_curr)
 
         print("Slave Dist: {} ; Last Dist: {}".format(num,dnum))
 
-        self.percentage_error = 100.0*num/dnum
+        self.percentage_error = 100.0* abs(dnum-num)/dnum
         print("Error={}%".format(self.percentage_error ))
 
         if self.percentage_error > 100:
