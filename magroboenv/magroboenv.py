@@ -218,7 +218,7 @@ class MagRoboEnv(gym.Env):
 
         goal_config = MProbe.goal.get_config()
         last_config = MProbe.goal.get_last_config()
-        assert(not goal_config == last_config)
+        assert(not np.array_equal(goal_config, last_config))
 
         goal_curr = goal_config[len(goal_config)-9 :]
         last_curr = last_config[len(last_config)-9 :]
