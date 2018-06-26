@@ -159,14 +159,14 @@ class MagRoboEnv(gym.Env):
         MProbe.desired_current.set_all_sys_current(action)
 
         #read the changed orientation
-        self.state = MProbe.slave.read_sys_configuration()
+        self.state = MProbe.slave.read_sys_configuration()[:6]
 
         self.count_ts += 1
 
     def reset(self):
 
         #read current orientation
-        self.state = MProbe.slave.read_sys_configuration()
+        self.state = MProbe.slave.read_sys_configuration()[:6]
 
         #set goal
         self.set_goal()
