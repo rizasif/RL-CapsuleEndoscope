@@ -9,7 +9,7 @@ from datetime import datetime
 import sys
 
 import magroboenv.myconfig as myconfig
-import magroboenv.DataProbe as MProbe
+import magroboenv.SimProbe as MProbe
 import magroboenv.EnvUtils as Utils
 
 def square(x):
