@@ -47,7 +47,7 @@ def train(num_timesteps, seed, env_name, fname):
 
         try:
             learn(env, policy=policy, vf=vf,
-                gamma=0.99, lam=0.97, timesteps_per_batch=1, #4500
+                gamma=0.99, lam=0.97, timesteps_per_batch=2500, #4500
                 desired_kl=0.002,
                 num_timesteps=num_timesteps, animate=visualization, fname=fname)
                 
@@ -66,7 +66,7 @@ if __name__ == "__main__":
     parser.add_argument('--seed', help='RNG seed', type=int, default=0)
     parser.add_argument('--fname', type=str, default='./ori_train/train_ori.ckpt')
     parser.add_argument('--env', type=str, default='MagRoboEnv-v0')
-    parser.add_argument('--num-timesteps', type=int, default=int(1e3)) #1e3
+    parser.add_argument('--num-timesteps', type=int, default=int(2e4)) #1e3
     args = parser.parse_args()
     log_dir="./log"
     logger.configure(dir=log_dir)

@@ -1,8 +1,5 @@
-import BB_packaging as BB
+import DataGen.BB_packaging as BB
 import numpy as np
-
-actData = np.array(parseData('matlab/actuatorPosition.txt'))
-MMData = np.array(parseData('matlab/MM.txt'))
 
 def parseData(path):
 	lines = []
@@ -19,6 +16,9 @@ def parseData(path):
 
 	return actData
 
+actData = np.array(parseData('matlab/actuatorPosition.txt'))
+MMData = np.array(parseData('matlab/MM.txt'))
+
 def getOri(pos, curr):
 
 	pos = np.array(pos)
@@ -32,5 +32,5 @@ def getOri(pos, curr):
 
 if __name__ == "__main__":
 
-	print( getOri( [[0.01],[0.01],[0.15]] , [2, 2, 2, 2, 2, 2, 2, 2, 2] ) )
+	print( getOri( [[0.05],[0.02],[0.15]] , [0.5, 2.5, 2.2, 2.1, -1.5, -1.3, 2, 2, 2] ) )
 
