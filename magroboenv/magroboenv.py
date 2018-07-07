@@ -161,8 +161,8 @@ class MagRoboEnv(gym.Env):
         #read the changed orientation
         # self.state = MProbe.slave.read_sys_configuration()
 
-        self.slave.simulate_currents(MProbe.desired_current.read_sys_current())
-        self.state = self.slave.read_sys_configuration()
+        MProbe.slave.simulate_currents(MProbe.desired_current.read_sys_current())
+        self.state = MProbe.slave.read_sys_configuration()
 
         self.count_ts += 1
 
