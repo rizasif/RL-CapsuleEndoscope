@@ -40,7 +40,7 @@ class Coordinate():
         self.y=Coordinate.y
         self.z=Coordinate.z
 
-    def get_coordinate(self, Coordinate):
+    def get_coordinate(self):
         return [self.x, self.y, self.z]
         
     def set_xyz(self, x, y, z):
