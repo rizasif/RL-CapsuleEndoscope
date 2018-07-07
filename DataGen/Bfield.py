@@ -16,8 +16,8 @@ def parseData(path):
 
 	return actData
 
-actData = np.array(parseData('matlab/actuatorPosition.txt'))
-MMData = np.array(parseData('matlab/MM.txt'))
+actData = np.array(parseData('DataGen/matlab/actuatorPosition.txt'))
+MMData = np.array(parseData('DataGen/matlab/MM.txt'))
 
 def getOri(pos, curr):
 
