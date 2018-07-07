@@ -16,8 +16,8 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
     """
     ob = env.reset()
     prev_ob = np.float32(np.zeros(ob.shape))
-    #prev_ob = np.int32(np.zeros(ob.shape))
-    if obfilter:
+
+    if not obfilter == None:
         ob = obfilter(ob)
     terminated = False
 
@@ -36,7 +36,6 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
         ac_dists.append(ac_dist)
         logps.append(logp)
         prev_ob = np.copy(ob)
-        #scaled_ac = env.action_space.low + (ac + 1.) * 0.5 * (env.action_space.high - env.action_space.low)
         scaled_ac = env.action_space.low + (ac + 1) * (env.action_space.high - env.action_space.low)
         scaled_ac = np.clip(scaled_ac, env.action_space.low, env.action_space.high)
         ob, rew, done, _ = env.step(scaled_ac)

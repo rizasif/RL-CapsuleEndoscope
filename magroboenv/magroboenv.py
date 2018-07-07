@@ -9,7 +9,7 @@ from datetime import datetime
 import sys
 
 import magroboenv.myconfig as myconfig
-import magroboenv.DataProbe as MProbe
+import magroboenv.SimProbe as MProbe
 import magroboenv.EnvUtils as Utils
 
 def square(x):
@@ -95,7 +95,7 @@ class MagRoboEnv(gym.Env):
         logging.debug("action={}".format(action))
         
         self._take_action(action)
-        ob = self.state
+        ob = self.state + MProbe.goal.read_sys_configuration()
         
         reward = self._get_reward()
 
@@ -145,7 +145,7 @@ class MagRoboEnv(gym.Env):
                 return
 
         #change the current
-        print("Taking actions: ", str(action))
+        #print("Taking actions: ", str(action))
         if myconfig.Config.CURR_DEVIATE_ACTIVE == True:
             MProbe.desired_current.set_all_sys_curr_deviate(action)
         else:
@@ -159,24 +159,30 @@ class MagRoboEnv(gym.Env):
         # MProbe.desired_current.set_all_sys_current(action)
 
         #read the changed orientation
-        self.state = MProbe.slave.read_sys_configuration()[:6]
+        # self.state = MProbe.slave.read_sys_configuration()
+
+        self.slave.simulate_currents(MProbe.desired_current.read_sys_current())
+        self.state = self.slave.read_sys_configuration()
 
         self.count_ts += 1
 
     def reset(self):
 
         #read current orientation
-        self.state = MProbe.slave.read_sys_configuration()[:6]
+        MProbe.slave.refresh()
+        self.state = MProbe.slave.read_sys_configuration()
 
         #set goal
         self.set_goal()
+        goal = MProbe.goal.read_sys_configuration()
+
+        ob = self.state + goal 
+        assert(len(ob) == 12)
 
         #generate random seed
         self.seed()
 
         self.count_ts = 0
-        
-        ob = self.state
 
         #Find Distance b/w start & goal
         self.init_dist = MProbe.slave.find_distance(MProbe.goal)
@@ -200,36 +206,40 @@ class MagRoboEnv(gym.Env):
         return np.array(ob)
 
     def set_goal(self):
-        #MProbe.goal.set_random_xyz()
-        # MProbe.goal.set_random_dev_xyz(MProbe.slave)
         MProbe.goal.refresh()
 
+        # Setting output position to same as slave
+        # Because of Bfield simulation setting
+        slave_config = MProbe.slave.get_config()
+        MProbe.goal.set_x(slave_config[0])
+        MProbe.goal.set_y(slave_config[1])
+        MProbe.goal.set_z(slave_config[2])
             
     def _get_reward(self):
 
-        self.last_dist = self.curr_dist
-        self.last_moment_dist = self.curr_moment_dist
+        # self.last_dist = self.curr_dist
+        # self.last_moment_dist = self.curr_moment_dist
 
-        self.curr_dist = MProbe.slave.find_distance(MProbe.goal)
-        self.curr_moment_dist = MProbe.slave.find_moment_distance(MProbe.goal)
+        # self.curr_dist = MProbe.slave.find_distance(MProbe.goal)
+        # self.curr_moment_dist = MProbe.slave.find_moment_distance(MProbe.goal)
         # print("eucledian distance: {} {}".format(self.curr_dist, self.curr_moment_dist))
         #print("goal: ({}, {}, {})".format(MProbe.goal.coordinate.x, MProbe.goal.coordinate.y, MProbe.goal.coordinate.z))
         # logging.debug("distance:{} {}".format(self.curr_dist, self.curr_moment_dist))
 
         goal_config = MProbe.goal.get_config()
-        last_config = MProbe.goal.get_last_config()
-        assert(not np.array_equal(goal_config, last_config))
+        last_goal_config = MProbe.goal.get_last_config()
+        slave_config = MProbe.slave.get_config()
+        last_slave_config = MProbe.slave.get_last_config()
 
-        goal_curr = goal_config[len(goal_config)-9 :]
-        last_curr = last_config[len(last_config)-9 :]
-        slave_curr = MProbe.desired_current.read_sys_current()
+        assert(not np.array_equal(goal_config, last_goal_config))
+        assert(not np.array_equal(slave_config, last_slave_config))
 
-        num = Utils.find_currents_distance(last_curr, slave_curr)
-        dnum = Utils.find_currents_distance(goal_curr, last_curr)
+        num = Utils.find_config_distance(last_slave_config, slave_config)
+        dnum = Utils.find_config_distance(goal_config, slave_config)
 
         print("Slave Dist: {} ; Last Dist: {}".format(num,dnum))
 
-        self.percentage_error = 100.0* abs(dnum-num)/dnum
+        self.percentage_error = 100.0* (num/dnum)
         print("Error={}%".format(self.percentage_error ))
 
         # if self.percentage_error > 100:

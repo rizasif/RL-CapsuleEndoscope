@@ -7,32 +7,35 @@ class Config:
     MASTER_LABEL = ('master_x', 'master_y', 'master_z', 'master_mx', 'master_my', 'master_mz')
     SLAVE_LABEL = ('slave_x', 'slave_y', 'slave_z', 'slave_mx', 'slave_my', 'slave_mz')
     AMP_LABEL = ('a_1','a_2','a_3','a_4','a_5','a_6','a_7','a_8','a_9')
+
+    #Probe dimention in mm
+    PROBE_DIM = 1
+
+    #Env diameter
+    ENV_DIM = 0.13
     
     # Orientation Configuration Parameters in millimeters
-    X_MAX_VAL = 250.0
-    X_MIN_VAL = -250.0
-    Y_MAX_VAL = 250.0
-    Y_MIN_VAL = -250.0
-    Z_MAX_VAL = 250.0
-    Z_MIN_VAL = -250.0
+    X_MAX_VAL = ENV_DIM/2.0
+    X_MIN_VAL = -ENV_DIM/2.0
+    Y_MAX_VAL = ENV_DIM/2.0
+    Y_MIN_VAL = -ENV_DIM/2.0
+    Z_MAX_VAL = 0
+    Z_MIN_VAL = 0
 
     X_MAX_DEVIATE = 20.0
     Y_MAX_DEVIATE = 20.0
     Z_MAX_DEVIATE = 20.0    
 
-    X_MAX_MAG_MOMENT = 7.0
-    X_MIN_MAG_MOMENT = -7.0
-    Y_MAX_MAG_MOMENT = 7.0
-    Y_MIN_MAG_MOMENT = -7.0
-    Z_MAX_MAG_MOMENT = 7.0
-    Z_MIN_MAG_MOMENT = -7.0
+    X_MAX_MAG_MOMENT = 360
+    X_MIN_MAG_MOMENT = 0
+    Y_MAX_MAG_MOMENT = 360
+    Y_MIN_MAG_MOMENT = 0
+    Z_MAX_MAG_MOMENT = 0
+    Z_MIN_MAG_MOMENT = 0
 
-    X_MAX_MAG_MOMENT_DEVIATE = 1.5
-    Y_MAX_MAG_MOMENT_DEVIATE = 1.5
-    Z_MAX_MAG_MOMENT_DEVIATE = 1.5
-
-    #Probe dimention in mm
-    PROBE_DIM = 1
+    X_MAX_MAG_MOMENT_DEVIATE = 3.0
+    Y_MAX_MAG_MOMENT_DEVIATE = 0.0
+    Z_MAX_MAG_MOMENT_DEVIATE = 0.0
     
     #activate X/Y/Z coordinates OR X/Y/Z M. Moment OR both
     # COORD -> coordinates
@@ -55,8 +58,8 @@ class Config:
     RUN_TIMES_PER_SEC = 20
 
     #Timestep Limit for episode
-    TIMESTEP_LIMIT = 10
-    RESET_STEP_COUNT = 10
+    TIMESTEP_LIMIT = 100
+    RESET_STEP_COUNT = 100
 
     #LOGFILE name without file extension (.log will be appended to filename)
     LOGFILE = "./log/magroboenv_"
