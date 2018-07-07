@@ -91,7 +91,7 @@ class MagRoboEnv(gym.Env):
                  However, official evaluations of your agent are not allowed to
                  use this for learning.
         """
-        print("ac={}".format(action))
+        # print("ac={}".format(action))
         logging.debug("action={}".format(action))
         
         self._take_action(action)
@@ -107,19 +107,19 @@ class MagRoboEnv(gym.Env):
         done = False
         if myconfig.Config.TRAINING_MODE == "COORD":
             if self.curr_dist >= 1.5*self.init_dist and self.count_ts >= myconfig.Config.RESET_STEP_COUNT:
-                print(" Reset Reward:{}, TS={}".format(reward, self.count_ts))
+                # print(" Reset Reward:{}, TS={}".format(reward, self.count_ts))
                 done = True
             elif self.curr_dist < myconfig.Config.PROBE_DIM:
-                print(" Reset Goal Reward:{}, TS={}".format(reward, self.count_ts))
+                # print(" Reset Goal Reward:{}, TS={}".format(reward, self.count_ts))
                 done = True
             else:
                 done = False
         elif myconfig.Config.TRAINING_MODE == "MOMENT":
             if self.percentage_error > 200 and self.count_ts >= myconfig.Config.RESET_STEP_COUNT:
-                print(" Reset Reward:{}, TS={}".format(reward, self.count_ts))
+                # print(" Reset Reward:{}, TS={}".format(reward, self.count_ts))
                 done = True
             elif self.percentage_error < 10:
-                print(" Reset Goal Reward:{}, TS={}".format(reward, self.count_ts))
+                # print(" Reset Goal Reward:{}, TS={}".format(reward, self.count_ts))
                 done = True
             else:
                 done = False
