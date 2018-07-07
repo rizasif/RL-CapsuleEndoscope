@@ -145,18 +145,18 @@ class MagRoboEnv(gym.Env):
                 return
 
         #change the current
-        #print("Taking actions: ", str(action))
-        # if myconfig.Config.CURR_DEVIATE_ACTIVE == True:
-        #     MProbe.desired_current.set_all_sys_curr_deviate(action)
-        # else:
-        #     MProbe.desired_current.set_all_sys_current(action)
+        print("Taking actions: ", str(action))
+        if myconfig.Config.CURR_DEVIATE_ACTIVE == True:
+            MProbe.desired_current.set_all_sys_curr_deviate(action)
+        else:
+            MProbe.desired_current.set_all_sys_current(action)
 
         #sleep for sometime before reading
         # sleep_time = 1.0 / myconfig.Config.RUN_TIMES_PER_SEC
         # sleep(sleep_time) #sleep in seconds
         
         # set action
-        MProbe.desired_current.set_all_sys_current(action)
+        # MProbe.desired_current.set_all_sys_current(action)
 
         #read the changed orientation
         self.state = MProbe.slave.read_sys_configuration()[:6]
@@ -232,10 +232,11 @@ class MagRoboEnv(gym.Env):
         self.percentage_error = 100.0* abs(dnum-num)/dnum
         print("Error={}%".format(self.percentage_error ))
 
-        if self.percentage_error > 100:
-            return 0
-        else:
-            return (1.0 - self.percentage_error/100)
+        # if self.percentage_error > 100:
+        #     return 0
+        # else:
+        #     return (1.0 - self.percentage_error/100)
+        return (1.0 - self.percentage_error/100)
         
         
         # """ Reward is given for XYZ. """

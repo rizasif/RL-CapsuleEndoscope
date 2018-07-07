@@ -17,8 +17,8 @@ class Config:
     Z_MIN_VAL = -250.0
 
     X_MAX_DEVIATE = 20.0
-    Y_MAX_DEVIATE = 0.0
-    Z_MAX_DEVIATE = 0.0    
+    Y_MAX_DEVIATE = 20.0
+    Z_MAX_DEVIATE = 20.0    
 
     X_MAX_MAG_MOMENT = 7.0
     X_MIN_MAG_MOMENT = -7.0
@@ -27,9 +27,9 @@ class Config:
     Z_MAX_MAG_MOMENT = 7.0
     Z_MIN_MAG_MOMENT = -7.0
 
-    X_MAX_MAG_MOMENT_DEVIATE = 3.0
-    Y_MAX_MAG_MOMENT_DEVIATE = 0.0
-    Z_MAX_MAG_MOMENT_DEVIATE = 0.0
+    X_MAX_MAG_MOMENT_DEVIATE = 1.5
+    Y_MAX_MAG_MOMENT_DEVIATE = 1.5
+    Z_MAX_MAG_MOMENT_DEVIATE = 1.5
 
     #Probe dimention in mm
     PROBE_DIM = 1
@@ -48,14 +48,14 @@ class Config:
     MAX_CURRENT = 2.0
     MIN_CURRENT = -2.0
     CURR_DEVIATE_ACTIVE = False
-    MAX_CURR_DEVIATE = 1.0
-    MIN_CURR_DEVIATE = -1.0
+    MAX_CURR_DEVIATE = 1.3
+    MIN_CURR_DEVIATE = -1.3
 
     #Change Currents time per second
-    RUN_TIMES_PER_SEC = 1
+    RUN_TIMES_PER_SEC = 20
 
     #Timestep Limit for episode
-    TIMESTEP_LIMIT = 5
+    TIMESTEP_LIMIT = 10
     RESET_STEP_COUNT = 10
 
     #LOGFILE name without file extension (.log will be appended to filename)
