@@ -91,7 +91,7 @@ class MagneticMoment():
         self.my=MagneticMoment.my
         self.mz=MagneticMoment.mz
     
-    def get_mmoment(self, MagneticMoment):
+    def get_mmoment(self):
         return [self.mx, self.my, self.mz]
         
     def set_xyz(self, x, y, z):
