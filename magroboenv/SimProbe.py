@@ -265,7 +265,7 @@ class MProbe():
         if myconfig.Config.CURR_DEVIATE_ACTIVE:
             self.set_random_dev_xyz()
         else:
-            self.set_random_xyz(self)
+            self.set_random_xyz()
             
         self.config = self.coordinate.get_coordinate() + self.mmoment.get_mmoment()
         assert (len(self.config) == 6)
