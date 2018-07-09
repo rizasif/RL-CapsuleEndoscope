@@ -90,7 +90,7 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
         logger.log("********** Iteration %i ************"%i)
 
         #Save model every 100 iterations
-        if fname != None and (i % 10 == 9):
+        if fname != None and (i % 100 == 0):
             os.makedirs(os.path.dirname(fname), exist_ok=True)
             saver = tf.train.Saver()
             saver.save(tf.get_default_session(), fname)
