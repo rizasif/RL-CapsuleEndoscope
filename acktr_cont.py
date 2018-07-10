@@ -83,6 +83,7 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
 
     i = 0
     timesteps_so_far = 0
+    total_reward = float()
     while True:
         print ("Timestep Number: %d of %d" % (timesteps_so_far, num_timesteps))
         if timesteps_so_far > num_timesteps:
@@ -114,6 +115,7 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
         advs = []
         for path in paths:
             rew_t = path["reward"]
+            total_reward+=float(rew_t)
             return_t = common.discount(rew_t, gamma)
             vtargs.append(return_t)
             vpred_t = vf.predict(path)
@@ -150,6 +152,7 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
         logger.record_tabular("EpRewMean", np.mean([path["reward"].sum() for path in paths]))
         logger.record_tabular("EpRewSEM", np.std([path["reward"].sum()/np.sqrt(len(paths)) for path in paths]))
         logger.record_tabular("EpLenMean", np.mean([pathlength(path) for path in paths]))
+        logger.record_tabular("TotalReward", total_reward)
         logger.record_tabular("KL", kl)
         if callback:
             callback()
