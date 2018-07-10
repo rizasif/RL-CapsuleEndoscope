@@ -83,6 +83,7 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
 
     i = 0
     timesteps_so_far = 0
+    total_reward = float()
     while True:
         print ("Timestep Number: %d of %d" % (timesteps_so_far, num_timesteps))
         if timesteps_so_far > num_timesteps:
@@ -114,6 +115,7 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
         advs = []
         for path in paths:
             rew_t = path["reward"]
+            total_reward+=float(rew_t)
             return_t = common.discount(rew_t, gamma)
             vtargs.append(return_t)
             vpred_t = vf.predict(path)
