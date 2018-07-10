@@ -115,7 +115,7 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
         advs = []
         for path in paths:
             rew_t = path["reward"]
-            total_reward+=float(rew_t)
+            total_reward+=np.sum(rew_t)
             return_t = common.discount(rew_t, gamma)
             vtargs.append(return_t)
             vpred_t = vf.predict(path)
