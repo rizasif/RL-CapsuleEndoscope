@@ -242,10 +242,12 @@ class MagRoboEnv(gym.Env):
         self.percentage_error = 100.0* (num/dnum)
         print("Error={}%".format(self.percentage_error ))
 
-        if self.percentage_error > 100:
-            return 0
-        else:
-            return (1.0 - self.percentage_error/100)
+        # if self.percentage_error > 100:
+        #     return -1
+        # else:
+        #     return (1.0 - self.percentage_error/100)
+
+        return (1.0 - self.percentage_error/10)
         
         
         # """ Reward is given for XYZ. """

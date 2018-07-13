@@ -7,6 +7,21 @@ from baselines.acktr import kfac
 from baselines.acktr.filters import ZFilter
 import os
 
+import logging
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+
+def setup_logger(name, log_file, level=logging.INFO):
+    """Function setup as many loggers as you want"""
+
+    handler = logging.FileHandler(log_file)        
+    handler.setFormatter(formatter)
+
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+    logger.addHandler(handler)
+
+    return logger
+
 def pathlength(path):
     return path["reward"].shape[0]# Loss function that we'll differentiate to get the policy gradient
 
@@ -50,6 +65,8 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
 
 def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
     animate=False, callback=None, desired_kl=0.002, fname='./training.ckpt'):
+
+    mean_logger = setup_logger("Mean Logger", "log/episode_mean.txt")
 
     obfilter = ZFilter(env.observation_space.shape)
 
@@ -115,7 +132,6 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
         advs = []
         for path in paths:
             rew_t = path["reward"]
-            total_reward+=np.sum(rew_t)
             return_t = common.discount(rew_t, gamma)
             vtargs.append(return_t)
             vpred_t = vf.predict(path)
@@ -149,14 +165,23 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
         else:
             logger.log("kl just right!")
 
-        logger.record_tabular("EpRewMean", np.mean([path["reward"].sum() for path in paths]))
-        logger.record_tabular("EpRewSEM", np.std([path["reward"].sum()/np.sqrt(len(paths)) for path in paths]))
-        logger.record_tabular("EpLenMean", np.mean([pathlength(path) for path in paths]))
-        logger.record_tabular("TotalReward", total_reward)
+        rew_mean = np.mean([path["reward"].sum() for path in paths])
+        rew_sem = np.std([path["reward"].sum()/np.sqrt(len(paths)) for path in paths])
+        len_mean = np.mean([pathlength(path) for path in paths])
+
+        total_reward += rew_mean
+
+        logger.record_tabular("EpRewMean", rew_mean)
+        logger.record_tabular("EpRewSEM", rew_sem)
+        logger.record_tabular("EpLenMean", len_mean)
+        logger.record_tabular("TotalRewardMean", total_reward)
         logger.record_tabular("KL", kl)
         if callback:
             callback()
         logger.dump_tabular()
+
+        mean_logger.info("Result for episode {}  of {}: Sum: {}, Average: {}, Length: {}".format(timesteps_so_far, num_timesteps, rew_mean, rew_sem, len_mean))
+
         i += 1
 
     if fname != None:
