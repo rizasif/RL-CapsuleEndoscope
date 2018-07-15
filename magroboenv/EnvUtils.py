@@ -11,3 +11,19 @@ def find_config_distance(config1, config2):
 	b = np.array(config2)
 
 	return np.linalg.norm(a-b)
+
+def calculate_reward(goal_config, slave_config, last_slave_config):
+		num = find_config_distance(last_slave_config, slave_config)
+		dnum = find_config_distance(goal_config, slave_config)
+
+		print("Slave Dist: {} ; Last Dist: {}".format(num,dnum))
+
+		percentage_error = 100.0* (num/dnum)
+		print("Error={}%".format(percentage_error ))
+
+		# if self.percentage_error > 100:
+		#	 return -1
+		# else:
+		#	 return (1.0 - self.percentage_error/100)
+
+		return percentage_error, (1.0 - percentage_error/10)
