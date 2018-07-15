@@ -6,6 +6,7 @@ from baselines.common import tf_util as U
 from baselines.acktr import kfac
 from baselines.acktr.filters import ZFilter
 import os
+import random
 
 import logging
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
@@ -29,11 +30,11 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
     """
     Simulate the env and policy for max_pathlength steps
     """
-    ob = env.reset()
+    init_ob = env.reset()
     prev_ob = np.float32(np.zeros(ob.shape))
 
     if not obfilter == None:
-        ob = obfilter(ob)
+        init_ob = obfilter(init_ob)
     terminated = False
 
     obs = []
@@ -44,21 +45,40 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
     for _ in range(max_pathlength):
         if animate:
             env.render()
-        state = np.concatenate([ob, prev_ob], -1)
+        state = np.concatenate([init_ob, prev_ob], -1)
         obs.append(state)
         ac, ac_dist, logp = policy.act(state)
         acs.append(ac)
         ac_dists.append(ac_dist)
         logps.append(logp)
-        prev_ob = np.copy(ob)
         scaled_ac = env.action_space.low + (ac + 1) * (env.action_space.high - env.action_space.low)
         scaled_ac = np.clip(scaled_ac, env.action_space.low, env.action_space.high)
         ob, rew, done, _ = env.step(scaled_ac)
         if obfilter: ob = obfilter(ob)
         rewards.append(rew)
+
+        goal_config, last_goal_config, slave_config, last_slave_config = env.get_all_configs()
+        for g in range(10):
+            new_goal_config = goal_config
+            new_goal_config[3] += round(random.uniform(-30, 30), 2)
+            new_goal_config[4] += round(random.uniform(-30, 30), 2)
+            new_rew = env.get_reward(new_goal_config, slave_config, last_slave_config)
+            new_ob = slave_config + new_goal_config
+            if obfilter: new_ob = obfilter(new_ob)
+            new_state = np.concatenate([new_ob, prev_ob], -1)
+            
+            obs.append(new_state)
+            rewards.append(new_rew)
+            acs.append(ac)
+            ac_dists.append(ac_dist)
+            logps.append(logp)
+
         if done:
             terminated = True
             break
+
+        prev_ob = np.copy(ob)
+
     return {"observation" : np.array(obs), "terminated" : terminated,
             "reward" : np.array(rewards), "action" : np.array(acs),
             "action_dist": np.array(ac_dists), "logp" : np.array(logps)}
