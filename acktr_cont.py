@@ -59,6 +59,7 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
         rewards.append(rew)
 
         # goal_config, last_goal_config, slave_config, last_slave_config = env.get_all_configs()
+        info = info[0]
         assert(len(info)==4)
         goal_config = info[0]
         last_goal_config= info[1]
