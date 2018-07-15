@@ -7,6 +7,7 @@ from baselines.acktr import kfac
 from baselines.acktr.filters import ZFilter
 import os
 import random
+import magroboenv.EnvUtils as Utils
 
 import logging
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
@@ -53,16 +54,21 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
         logps.append(logp)
         scaled_ac = env.action_space.low + (ac + 1) * (env.action_space.high - env.action_space.low)
         scaled_ac = np.clip(scaled_ac, env.action_space.low, env.action_space.high)
-        ob, rew, done, _ = env.step(scaled_ac)
+        ob, rew, done, info = env.step(scaled_ac)
         if obfilter: ob = obfilter(ob)
         rewards.append(rew)
 
-        goal_config, last_goal_config, slave_config, last_slave_config = env.get_all_configs()
+        # goal_config, last_goal_config, slave_config, last_slave_config = env.get_all_configs()
+        assert(len(info)==4)
+        goal_config = info[0]
+        last_goal_config= info[1]
+        slave_config = info[2]
+        last_slave_config = info[3]
         for g in range(10):
             new_goal_config = goal_config
             new_goal_config[3] += round(random.uniform(-30, 30), 2)
             new_goal_config[4] += round(random.uniform(-30, 30), 2)
-            new_rew = env.get_reward(new_goal_config, slave_config, last_slave_config)
+            percent_error, new_rew = Utils.calculate_reward(new_goal_config, slave_config, last_slave_config)
             new_ob = slave_config + new_goal_config
             if obfilter: new_ob = obfilter(new_ob)
             new_state = np.concatenate([new_ob, prev_ob], -1)

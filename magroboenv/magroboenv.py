@@ -133,7 +133,7 @@ class MagRoboEnv(gym.Env):
             #     done = False
 
         
-        info = {}
+        info = self.get_all_configs()
         
         return ob, reward, done, info
 
@@ -214,22 +214,6 @@ class MagRoboEnv(gym.Env):
         MProbe.goal.set_x(slave_config[0])
         MProbe.goal.set_y(slave_config[1])
         MProbe.goal.set_z(slave_config[2])
-    
-    def calculate_reward(self, goal_config, slave_config, last_slave_config):
-        num = Utils.find_config_distance(last_slave_config, slave_config)
-        dnum = Utils.find_config_distance(goal_config, slave_config)
-
-        print("Slave Dist: {} ; Last Dist: {}".format(num,dnum))
-
-        self.percentage_error = 100.0* (num/dnum)
-        print("Error={}%".format(self.percentage_error ))
-
-        # if self.percentage_error > 100:
-        #     return -1
-        # else:
-        #     return (1.0 - self.percentage_error/100)
-
-        return (1.0 - self.percentage_error/10)
 
     def get_all_configs(self):
         goal_config = MProbe.goal.get_config()
@@ -255,8 +239,8 @@ class MagRoboEnv(gym.Env):
         assert(not np.array_equal(goal_config, last_goal_config))
         assert(not np.array_equal(slave_config, last_slave_config))
 
-        return self.calculate_reward(goal_config, slave_config, last_slave_config)
-        
+        self.percentage_error, rew = Utils.calculate_reward(goal_config, slave_config, last_slave_config)
+        return rew
         
         
         # """ Reward is given for XYZ. """
