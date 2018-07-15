@@ -214,26 +214,8 @@ class MagRoboEnv(gym.Env):
         MProbe.goal.set_x(slave_config[0])
         MProbe.goal.set_y(slave_config[1])
         MProbe.goal.set_z(slave_config[2])
-            
-    def _get_reward(self):
-
-        # self.last_dist = self.curr_dist
-        # self.last_moment_dist = self.curr_moment_dist
-
-        # self.curr_dist = MProbe.slave.find_distance(MProbe.goal)
-        # self.curr_moment_dist = MProbe.slave.find_moment_distance(MProbe.goal)
-        # print("eucledian distance: {} {}".format(self.curr_dist, self.curr_moment_dist))
-        #print("goal: ({}, {}, {})".format(MProbe.goal.coordinate.x, MProbe.goal.coordinate.y, MProbe.goal.coordinate.z))
-        # logging.debug("distance:{} {}".format(self.curr_dist, self.curr_moment_dist))
-
-        goal_config = MProbe.goal.get_config()
-        last_goal_config = MProbe.goal.get_last_config()
-        slave_config = MProbe.slave.get_config()
-        last_slave_config = MProbe.slave.get_last_config()
-
-        assert(not np.array_equal(goal_config, last_goal_config))
-        assert(not np.array_equal(slave_config, last_slave_config))
-
+    
+    def calculate_reward(self, goal_config, slave_config, last_slave_config):
         num = Utils.find_config_distance(last_slave_config, slave_config)
         dnum = Utils.find_config_distance(goal_config, slave_config)
 
@@ -248,6 +230,33 @@ class MagRoboEnv(gym.Env):
         #     return (1.0 - self.percentage_error/100)
 
         return (1.0 - self.percentage_error/10)
+
+    def get_all_configs(self):
+        goal_config = MProbe.goal.get_config()
+        last_goal_config = MProbe.goal.get_last_config()
+        slave_config = MProbe.slave.get_config()
+        last_slave_config = MProbe.slave.get_last_config()
+
+        return goal_config, last_goal_config, slave_config, last_slave_config
+
+    def _get_reward(self):
+
+        # self.last_dist = self.curr_dist
+        # self.last_moment_dist = self.curr_moment_dist
+
+        # self.curr_dist = MProbe.slave.find_distance(MProbe.goal)
+        # self.curr_moment_dist = MProbe.slave.find_moment_distance(MProbe.goal)
+        # print("eucledian distance: {} {}".format(self.curr_dist, self.curr_moment_dist))
+        #print("goal: ({}, {}, {})".format(MProbe.goal.coordinate.x, MProbe.goal.coordinate.y, MProbe.goal.coordinate.z))
+        # logging.debug("distance:{} {}".format(self.curr_dist, self.curr_moment_dist))
+
+        goal_config, last_goal_config, slave_config, last_slave_config = self.get_all_configs()
+
+        assert(not np.array_equal(goal_config, last_goal_config))
+        assert(not np.array_equal(slave_config, last_slave_config))
+
+        return self.calculate_reward(goal_config, slave_config, last_slave_config)
+        
         
         
         # """ Reward is given for XYZ. """

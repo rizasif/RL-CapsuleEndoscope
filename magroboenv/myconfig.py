@@ -58,7 +58,7 @@ class Config:
     RUN_TIMES_PER_SEC = 1
 
     #Timestep Limit for episode
-    TIMESTEP_LIMIT = 100
+    TIMESTEP_LIMIT = 10
     RESET_STEP_COUNT = 100
 
     #LOGFILE name without file extension (.log will be appended to filename)
