@@ -135,7 +135,7 @@ class MagRoboEnv(gym.Env):
         
         info = self.get_all_configs()
         
-        return ob, reward, done, list(info)
+        return ob, reward, done, {0:list(info)}
 
     def _take_action(self, action):
 
