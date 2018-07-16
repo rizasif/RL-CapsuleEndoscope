@@ -24,8 +24,8 @@ def calculate_reward(goal_config, slave_config, last_slave_config):
 		assert(percentage_error > 0)
 
 		if percentage_error <= 10:
-			 return (100.0 - percentage_error*10.0)
+			 return int(100.0 - percentage_error*10.0)
 		else:
-			 return (percentage_error-10.0)*(-1)
+			 return int(percentage_error-10.0)*(-1)
 
 		# return percentage_error, (1.0 - percentage_error/10)
