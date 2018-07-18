@@ -201,7 +201,7 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
             logger.log("kl just right!")
 
 
-        rewList = np.array([])
+        rewList = []
         for path in paths:
             trew = []
             rew_i = 0
@@ -211,7 +211,7 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
                 if rew_i > (len(path["reward"])-1):
                     break
             rewList.append( np.array(trew) )
-        # rewList = np.array(rewList)
+        rewList = np.array(rewList)
 
         rew_mean = np.mean([path.sum() for path in rewList])
         rew_sem = np.std([path.sum()/np.sqrt(len(rewList)) for path in rewList])
