@@ -27,6 +27,14 @@ def setup_logger(name, log_file, level=logging.INFO):
 def pathlength(path):
     return path["reward"].shape[0]# Loss function that we'll differentiate to get the policy gradient
 
+def incAngle(x):
+    while(True):
+        x += round(random.uniform(-180, 180), 2)
+        if x > -180 and x < 180:
+            break
+    return x
+
+
 def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
     """
     Simulate the env and policy for max_pathlength steps
@@ -66,9 +74,9 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
         slave_config = info[2]
         last_slave_config = info[3]
         for g in range(10):
-            new_goal_config = goal_config
-            new_goal_config[3] += round(random.uniform(-30, 30), 2)
-            new_goal_config[4] += round(random.uniform(-30, 30), 2)
+            new_goal_config = goal_config 
+            new_goal_config[3] = incAngle(new_goal_config[3])
+            new_goal_config[4] = incAngle(new_goal_config[4])
             percent_error, new_rew = Utils.calculate_reward(new_goal_config, slave_config, last_slave_config)
             new_ob = slave_config + new_goal_config
             if obfilter: new_ob = obfilter(new_ob)
@@ -192,9 +200,26 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
         else:
             logger.log("kl just right!")
 
-        rew_mean = np.mean([path["reward"].sum() for path in paths])
-        rew_sem = np.std([path["reward"].sum()/np.sqrt(len(paths)) for path in paths])
-        len_mean = np.mean([pathlength(path) for path in paths])
+
+        rewList = []
+        for path in paths:
+            trew = []
+            rew_i = 0
+            while True:
+                trew.append(path["reward"][rew_i])
+                rew_i += 11
+                if rew_i > (len(path["reward"])-1):
+                    break
+            rewList.append(trew)
+        rewList = np.array(rewList)
+
+        rew_mean = np.mean([path.sum() for path in rewList])
+        rew_sem = np.std([path.sum()/np.sqrt(len(rewList)) for path in rewList])
+        len_mean = np.mean([path.shape[0] for path in rewList])
+
+        # rew_mean = np.mean([path["reward"].sum() for path in paths])
+        # rew_sem = np.std([path["reward"].sum()/np.sqrt(len(paths)) for path in paths])
+        # len_mean = np.mean([pathlength(path) for path in paths])
 
         total_reward += rew_mean
 
