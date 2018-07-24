@@ -32,6 +32,8 @@ def incAngle(x):
         x += round(random.uniform(-180, 180), 2)
         if x > -180 and x < 180:
             break
+        else:
+            x = 0
     return x
 
 
