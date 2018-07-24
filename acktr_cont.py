@@ -68,7 +68,7 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
 
         # goal_config, last_goal_config, slave_config, last_slave_config = env.get_all_configs()
         info = info[0]
-        assert(len(info)==4)
+        assert(len(info)==4, "Info length not 4")
         goal_config = info[0]
         last_goal_config= info[1]
         slave_config = info[2]
@@ -130,7 +130,7 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
     enqueue_threads = []
     coord = tf.train.Coordinator()
     for qr in [q_runner, vf.q_runner]:
-        assert (qr != None)
+        assert (qr != None, "QR is None")
         enqueue_threads.extend(qr.create_threads(tf.get_default_session(), coord=coord, start=True))
 
     i = 0

@@ -177,7 +177,7 @@ class MagRoboEnv(gym.Env):
         goal = MProbe.goal.read_sys_configuration()
 
         ob = self.state + goal 
-        assert(len(ob) == 12)
+        assert(len(ob) == 12, "goal length not 12")
 
         #generate random seed
         self.seed()
@@ -236,8 +236,8 @@ class MagRoboEnv(gym.Env):
 
         goal_config, last_goal_config, slave_config, last_slave_config = self.get_all_configs()
 
-        assert(not np.array_equal(goal_config, last_goal_config))
-        assert(not np.array_equal(slave_config, last_slave_config))
+        assert(not np.array_equal(goal_config, last_goal_config), "Unequal goal config")
+        assert(not np.array_equal(slave_config, last_slave_config), "Unequal slave config")
 
         self.percentage_error, rew = Utils.calculate_reward(goal_config, slave_config, last_slave_config)
         return rew
