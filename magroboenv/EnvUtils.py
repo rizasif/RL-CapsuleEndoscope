@@ -23,10 +23,15 @@ def calculate_reward(goal_config, slave_config, last_slave_config):
 
 		assert(percentage_error >= 0, "Percentage error is negative")
 
-		if percentage_error <= 10:
-			 rew = (100.0 - percentage_error*10.0)
+		# if percentage_error <= 10:
+		# 	 rew = (100.0 - percentage_error*10.0)
+		# else:
+		# 	 rew = (percentage_error-10.0)*(-1)
+
+		if percentage_error <= 50:
+			 rew = 100.0 - (percentage_error*2.0)
 		else:
-			 rew = (percentage_error-10.0)*(-1)
+			 rew = (percentage_error-50.0)*(-1)
 
 		# rew = (1.0 - percentage_error/10)
 
