@@ -117,9 +117,11 @@ class MagRoboEnv(gym.Env):
         elif myconfig.Config.TRAINING_MODE == "MOMENT":
             if self.percentage_error > 200 and self.count_ts >= myconfig.Config.RESET_STEP_COUNT:
                 # print(" Reset Reward:{}, TS={}".format(reward, self.count_ts))
+                reward *= (-10.0)
                 done = True
             elif self.percentage_error < 10:
                 # print(" Reset Goal Reward:{}, TS={}".format(reward, self.count_ts))
+                reward *= 10.0
                 done = True
             else:
                 done = False

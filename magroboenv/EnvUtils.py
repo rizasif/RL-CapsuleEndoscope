@@ -36,6 +36,12 @@ def calculate_reward(goal_config, slave_config, last_slave_config):
 		# 	 rew = (percentage_error-50.0)*(-1)
 
 		# Absolute
-		rew = (100.0 - percentage_error)
+		# rew = (100.0 - percentage_error)
 
-		return percentage_error, rew
+		# Angular
+		if dnum <= 30:
+			 rew = ((30.0 - dnum)/30.0)*100.0
+		else:
+			 rew = (dnum-30.0)*(-10.0)
+
+		return dnum, rew
