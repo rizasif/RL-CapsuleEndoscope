@@ -48,6 +48,8 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
         init_ob = obfilter(init_ob)
     terminated = False
 
+    terminal_rewards = []
+
     obs = []
     acs = []
     ac_dists = []
@@ -67,6 +69,7 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
         ob, rew, done, info = env.step(scaled_ac)
         if obfilter: ob = obfilter(ob)
         rewards.append(rew)
+        terminal_rewards.append(rew)
 
         # goal_config, last_goal_config, slave_config, last_slave_config = env.get_all_configs()
         info = info[0]
@@ -98,7 +101,7 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
 
     return {"observation" : np.array(obs), "terminated" : terminated,
             "reward" : np.array(rewards), "action" : np.array(acs),
-            "action_dist": np.array(ac_dists), "logp" : np.array(logps)}
+            "action_dist": np.array(ac_dists), "logp" : np.array(logps)}, terminal_rewards
 
 def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
     animate=False, callback=None, desired_kl=0.002, fname='./training.ckpt'):
@@ -155,9 +158,11 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
         # Collect paths until we have enough timesteps
         timesteps_this_batch = 0
         paths = []
+        terminal_rew = []
         while True:
-            path = rollout(env, policy, max_pathlength, animate=(len(paths)==0 and (i % 10 == 0) and animate), obfilter=obfilter)
+            path, temp_rew = rollout(env, policy, max_pathlength, animate=(len(paths)==0 and (i % 10 == 0) and animate), obfilter=obfilter)
             paths.append(path)
+            terminal_rew.append(np.array(temp_rew))
             n = pathlength(path)
             timesteps_this_batch += n
             if timesteps_this_batch > timesteps_per_batch:
@@ -203,21 +208,26 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
             logger.log("kl just right!")
 
 
-        rewList = []
-        for path in paths:
-            trew = []
-            rew_i = 0
-            while True:
-                trew.append(path["reward"][rew_i])
-                rew_i += 11
-                if rew_i > (len(path["reward"])-1):
-                    break
-            rewList.append( np.array(trew) )
-        rewList = np.array(rewList)
+        terminal_rew = np.array(terminal_rew)
+        rew_mean = np.mean([path.sum() for path in terminal_rew])
+        rew_sem = np.std([path.sum()/np.sqrt(len()) for path in terminal_rew])
+        len_mean = np.mean([path.shape[0] for path in terminal_rew])
 
-        rew_mean = np.mean([path.sum() for path in rewList])
-        rew_sem = np.std([path.sum()/np.sqrt(len(rewList)) for path in rewList])
-        len_mean = np.mean([path.shape[0] for path in rewList])
+        # rewList = []
+        # for path in paths:
+        #     trew = []
+        #     rew_i = 0
+        #     while True:
+        #         trew.append(path["reward"][rew_i])
+        #         rew_i += 11
+        #         if rew_i > (len(path["reward"])-1):
+        #             break
+        #     rewList.append( np.array(trew) )
+        # rewList = np.array(rewList)
+
+        # rew_mean = np.mean([path.sum() for path in rewList])
+        # rew_sem = np.std([path.sum()/np.sqrt(len(rewList)) for path in rewList])
+        # len_mean = np.mean([path.shape[0] for path in rewList])
 
         # rew_mean = np.mean([path["reward"].sum() for path in paths])
         # rew_sem = np.std([path["reward"].sum()/np.sqrt(len(paths)) for path in paths])

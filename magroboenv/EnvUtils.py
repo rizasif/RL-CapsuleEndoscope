@@ -40,7 +40,7 @@ def calculate_reward(goal_config, slave_config, last_slave_config):
 
 		# Angular
 		if dnum <= 50:
-			 rew = ((50.0 - dnum)/50.0)*100.0
+			 rew = ((50.0 - dnum)/50.0)
 		else:
 			#  rew = (dnum-50.0)*(-10.0)
 			rew = -1
