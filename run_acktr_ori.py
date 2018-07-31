@@ -40,6 +40,8 @@ def train(num_timesteps, seed, env_name, fname):
         ob_dim = env.observation_space.shape[0]
         ac_dim = env.action_space.shape[0]
 
+        print("Observation dim: ", ob_dim)
+
         with tf.variable_scope("vf"):
             vf = NeuralNetValueFunction(ob_dim, ac_dim)
         with tf.variable_scope("pi"):
