@@ -66,7 +66,7 @@ if __name__ == "__main__":
     parser.add_argument('--seed', help='RNG seed', type=int, default=0)
     parser.add_argument('--fname', type=str, default='./ori_train/train_ori.ckpt')
     parser.add_argument('--env', type=str, default='MagRoboEnv-v0')
-    parser.add_argument('--num-timesteps', type=int, default=int(2e4)) #1e3
+    parser.add_argument('--num-timesteps', type=int, default=int(4e4)) #1e3
     args = parser.parse_args()
     log_dir="./log"
     logger.configure(dir=log_dir)
