@@ -111,8 +111,10 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
 
     mean_logger = setup_logger("Mean Logger", "log/episode_mean.txt")
 
-    print("Filter shape:  ", env.observation_space.shape)
-    obfilter = ZFilter(env.observation_space.shape)
+    # print("Filter shape:  ", env.observation_space.shape)
+    space = env.observation_space.shape
+    space[0] *= 2
+    obfilter = ZFilter(space)
 
     max_pathlength = env.spec.timestep_limit
     stepsize = tf.Variable(initial_value=np.float32(np.array(0.03)), name='stepsize')
