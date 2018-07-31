@@ -69,7 +69,6 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
         scaled_ac = env.action_space.low + (ac + 1) * (env.action_space.high - env.action_space.low)
         scaled_ac = np.clip(scaled_ac, env.action_space.low, env.action_space.high)
         ob, rew, done, info = env.step(scaled_ac)
-        print("Post Step Ob: ", ob)
         if obfilter: ob = obfilter(ob)
         rewards.append(rew)
         terminal_rewards.append(rew)
@@ -112,6 +111,7 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
 
     mean_logger = setup_logger("Mean Logger", "log/episode_mean.txt")
 
+    print("Filter shape:  ", env.observation_space.shape)
     obfilter = ZFilter(env.observation_space.shape)
 
     max_pathlength = env.spec.timestep_limit
