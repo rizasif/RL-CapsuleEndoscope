@@ -42,7 +42,7 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
     Simulate the env and policy for max_pathlength steps
     """
     init_ob = env.reset()
-    prev_ob = np.float32(np.zeros(init_ob.shape))
+    # prev_ob = np.float32(np.zeros(init_ob.shape))
 
     if not obfilter == None:
         init_ob = obfilter(init_ob)
@@ -58,7 +58,7 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
     for _ in range(max_pathlength):
         if animate:
             env.render()
-        state = np.concatenate([init_ob, prev_ob], -1)
+        state = np.concatenate([init_ob], -1)
         obs.append(state)
         ac, ac_dist, logp = policy.act(state)
         acs.append(ac)
@@ -85,7 +85,7 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
             percent_error, new_rew = Utils.calculate_reward(new_goal_config, slave_config, last_slave_config)
             new_ob = slave_config + new_goal_config
             if obfilter: new_ob = obfilter(new_ob)
-            new_state = np.concatenate([new_ob, prev_ob], -1)
+            new_state = np.concatenate([new_ob], -1)
             
             obs.append(new_state)
             rewards.append(new_rew)
