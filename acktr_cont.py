@@ -59,7 +59,8 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
     for _ in range(max_pathlength):
         if animate:
             env.render()
-        state = np.concatenate([init_ob[:6], init_ob[6:]], -1)
+        # state = np.concatenate([init_ob[:6], init_ob[6:]], -1)
+        state = np.array(init_ob)
         obs.append(state)
         ac, ac_dist, logp = policy.act(state)
         acs.append(ac)
@@ -86,7 +87,8 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
             percent_error, new_rew = Utils.calculate_reward(new_goal_config, slave_config, last_slave_config)
             new_ob = slave_config + new_goal_config
             if obfilter: new_ob = obfilter(new_ob)
-            new_state = np.concatenate([new_ob[:6], new_ob[6:]], -1)
+            # new_state = np.concatenate([new_ob[:6], new_ob[6:]], -1)
+            new_state = np.array(new_ob)
             
             obs.append(new_state)
             rewards.append(new_rew)
