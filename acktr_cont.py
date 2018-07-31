@@ -210,7 +210,7 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
 
         terminal_rew = np.array(terminal_rew)
         rew_mean = np.mean([path.sum() for path in terminal_rew])
-        rew_sem = np.std([path.sum()/np.sqrt(len()) for path in terminal_rew])
+        rew_sem = np.std([path.sum()/np.sqrt(len(terminal_rew)) for path in terminal_rew])
         len_mean = np.mean([path.shape[0] for path in terminal_rew])
 
         # rewList = []
