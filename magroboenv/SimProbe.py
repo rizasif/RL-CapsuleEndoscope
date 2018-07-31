@@ -242,13 +242,13 @@ class Current():
 #class representing the probing robot 
 class MProbe():
 
-    ob_low  = np.array([myconfig.Config.X_MIN_VAL, myconfig.Config.Y_MIN_VAL, myconfig.Config.Z_MIN_VAL, myconfig.Config.X_MIN_MAG_MOMENT, myconfig.Config.Y_MIN_MAG_MOMENT, myconfig.Config.Z_MIN_MAG_MOMENT,
-        myconfig.Config.X_MIN_VAL, myconfig.Config.Y_MIN_VAL, myconfig.Config.Z_MIN_VAL, myconfig.Config.X_MIN_MAG_MOMENT, myconfig.Config.Y_MIN_MAG_MOMENT, myconfig.Config.Z_MIN_MAG_MOMENT])
-    ob_high = np.array([myconfig.Config.X_MAX_VAL, myconfig.Config.Y_MAX_VAL, myconfig.Config.Z_MAX_VAL, myconfig.Config.X_MAX_MAG_MOMENT, myconfig.Config.Y_MAX_MAG_MOMENT, myconfig.Config.Z_MAX_MAG_MOMENT,
-        myconfig.Config.X_MAX_VAL, myconfig.Config.Y_MAX_VAL, myconfig.Config.Z_MAX_VAL, myconfig.Config.X_MAX_MAG_MOMENT, myconfig.Config.Y_MAX_MAG_MOMENT, myconfig.Config.Z_MAX_MAG_MOMENT])
+    # ob_low  = np.array([myconfig.Config.X_MIN_VAL, myconfig.Config.Y_MIN_VAL, myconfig.Config.Z_MIN_VAL, myconfig.Config.X_MIN_MAG_MOMENT, myconfig.Config.Y_MIN_MAG_MOMENT, myconfig.Config.Z_MIN_MAG_MOMENT,
+    #     myconfig.Config.X_MIN_VAL, myconfig.Config.Y_MIN_VAL, myconfig.Config.Z_MIN_VAL, myconfig.Config.X_MIN_MAG_MOMENT, myconfig.Config.Y_MIN_MAG_MOMENT, myconfig.Config.Z_MIN_MAG_MOMENT])
+    # ob_high = np.array([myconfig.Config.X_MAX_VAL, myconfig.Config.Y_MAX_VAL, myconfig.Config.Z_MAX_VAL, myconfig.Config.X_MAX_MAG_MOMENT, myconfig.Config.Y_MAX_MAG_MOMENT, myconfig.Config.Z_MAX_MAG_MOMENT,
+    #     myconfig.Config.X_MAX_VAL, myconfig.Config.Y_MAX_VAL, myconfig.Config.Z_MAX_VAL, myconfig.Config.X_MAX_MAG_MOMENT, myconfig.Config.Y_MAX_MAG_MOMENT, myconfig.Config.Z_MAX_MAG_MOMENT])
 
-    # ob_low  = np.array([myconfig.Config.X_MIN_VAL, myconfig.Config.Y_MIN_VAL, myconfig.Config.Z_MIN_VAL, myconfig.Config.X_MIN_MAG_MOMENT, myconfig.Config.Y_MIN_MAG_MOMENT, myconfig.Config.Z_MIN_MAG_MOMENT])
-    # ob_high = np.array([myconfig.Config.X_MAX_VAL, myconfig.Config.Y_MAX_VAL, myconfig.Config.Z_MAX_VAL, myconfig.Config.X_MAX_MAG_MOMENT, myconfig.Config.Y_MAX_MAG_MOMENT, myconfig.Config.Z_MAX_MAG_MOMENT])
+    ob_low  = np.array([myconfig.Config.X_MIN_VAL, myconfig.Config.Y_MIN_VAL, myconfig.Config.Z_MIN_VAL, myconfig.Config.X_MIN_MAG_MOMENT, myconfig.Config.Y_MIN_MAG_MOMENT, myconfig.Config.Z_MIN_MAG_MOMENT])
+    ob_high = np.array([myconfig.Config.X_MAX_VAL, myconfig.Config.Y_MAX_VAL, myconfig.Config.Z_MAX_VAL, myconfig.Config.X_MAX_MAG_MOMENT, myconfig.Config.Y_MAX_MAG_MOMENT, myconfig.Config.Z_MAX_MAG_MOMENT])
 
     def __init__(self, name='unknown'):
         self.coordinate = Coordinate()
