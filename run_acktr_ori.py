@@ -49,7 +49,7 @@ def train(num_timesteps, seed, env_name, fname):
 
         try:
             learn(env, policy=policy, vf=vf,
-                gamma=0.99, lam=0.97, timesteps_per_batch=2500, #4500
+                gamma=0.99, lam=0.97, timesteps_per_batch=100, #4500
                 desired_kl=0.002,
                 num_timesteps=num_timesteps, animate=visualization, fname=fname)
                 
