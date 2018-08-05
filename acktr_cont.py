@@ -88,7 +88,7 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
         last_goal_config= info[1]
         slave_config = info[2]
         last_slave_config = info[3]
-        for g in range(10):
+        for g in range(100):
             new_goal_config = goal_config 
             new_goal_config[3] = incAngle(new_goal_config[3])
             new_goal_config[4] = incAngle(new_goal_config[4])
