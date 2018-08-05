@@ -144,7 +144,7 @@ def learn(env, policy, vf, gamma, lam, timesteps_per_batch, num_timesteps,
     obfilter = ZFilter(space)
 
     max_pathlength = env.spec.timestep_limit
-    stepsize = tf.Variable(initial_value=np.float32(np.array(0.003)), name='stepsize') #0.03
+    stepsize = tf.Variable(initial_value=np.float32(np.array(0.03)), name='stepsize') #0.03
     inputs, loss, loss_sampled = policy.update_info
     optim = kfac.KfacOptimizer(learning_rate=stepsize, cold_lr=stepsize*(1-0.9), momentum=0.9, kfac_update=2,\
                                 epsilon=1e-2, stats_decay=0.99, async=1, cold_iter=1,
