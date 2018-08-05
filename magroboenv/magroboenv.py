@@ -124,7 +124,7 @@ class MagRoboEnv(gym.Env):
                 force_terminate = True
             elif self.percentage_error < 30:
                 # print(" Reset Goal Reward:{}, TS={}".format(reward, self.count_ts))
-                reward += (( 30.0 - self.percentage_error )/30.0)
+                reward += (( 30.0 - self.percentage_error )/30.0)/2.0
                 done = True
             else:
                 done = False
