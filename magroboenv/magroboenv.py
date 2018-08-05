@@ -105,10 +105,11 @@ class MagRoboEnv(gym.Env):
         else:
             done = False'''
         done = False
+        force_terminate = False
         if myconfig.Config.TRAINING_MODE == "COORD":
             if self.curr_dist >= 1.5*self.init_dist and self.count_ts >= myconfig.Config.RESET_STEP_COUNT:
                 # print(" Reset Reward:{}, TS={}".format(reward, self.count_ts))
-                done = True
+                done = False
             elif self.curr_dist < myconfig.Config.PROBE_DIM:
                 # print(" Reset Goal Reward:{}, TS={}".format(reward, self.count_ts))
                 done = True
@@ -119,7 +120,8 @@ class MagRoboEnv(gym.Env):
             if self.count_ts >= myconfig.Config.RESET_STEP_COUNT:
                 # print(" Reset Reward:{}, TS={}".format(reward, self.count_ts))
                 # reward *= (-10.0)
-                done = True
+                # done = True
+                force_terminate = True
             elif self.percentage_error < 30:
                 # print(" Reset Goal Reward:{}, TS={}".format(reward, self.count_ts))
                 reward += (( 30.0 - self.percentage_error )/30.0)/10.0
@@ -138,7 +140,7 @@ class MagRoboEnv(gym.Env):
         
         info = self.get_all_configs()
         
-        return ob, reward, done, {0:list(info)}
+        return ob, reward, done, {0:list(info), 1:force_terminate}
 
     def _take_action(self, action):
 

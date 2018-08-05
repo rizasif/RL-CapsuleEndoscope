@@ -9,6 +9,8 @@ import os
 import random
 import magroboenv.EnvUtils as Utils
 
+from DataGen import Bfield
+
 import logging
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 
@@ -56,6 +58,7 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
     ac_dists = []
     logps = []
     rewards = []
+    last_ac = []
     for _ in range(max_pathlength):
         if animate:
             env.render()
@@ -63,6 +66,8 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
         state = np.array(init_ob)
         obs.append(state)
         ac, ac_dist, logp = policy.act(state)
+        assert(not ac == last_ac)
+        last_ac = ac
         acs.append(ac)
         ac_dists.append(ac_dist)
         logps.append(logp)
@@ -75,6 +80,7 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
 
         # goal_config, last_goal_config, slave_config, last_slave_config = env.get_all_configs()
         info = info[0]
+        force_terminate = info[1]
         assert(len(info)==4, "Info length not 4")
         goal_config = info[0]
         last_goal_config= info[1]
@@ -99,6 +105,27 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
         if done:
             terminated = True
             break
+        # elif force_terminate:
+        #     # Bias the data
+        #     percent_error, new_rew = Utils.calculate_reward(goal_config, goal_config, last_slave_config)
+        #     new_ob = goal_config + goal_config
+        #     if obfilter: new_ob = obfilter(new_ob)
+        #     # new_state = np.concatenate([new_ob[:6], new_ob[6:]], -1)
+        #     new_state = np.array(new_ob)
+
+        #     ac = Bfield.getCurrents(goal_config[:3], goal_config[3:])
+
+        #     scaled_ac = env.action_space.low + (ac + 1) * (env.action_space.high - env.action_space.low)
+
+        #     scaled_ac = np.clip(scaled_ac, env.action_space.low, env.action_space.high)
+        #     ob, rew, done, info = env.step(scaled_ac)
+            
+        #     obs.append(new_state)
+        #     rewards.append(new_rew)
+        #     acs.append(ac)
+        #     ac_dists.append(ac_dist)
+        #     logps.append(logp)
+
 
         prev_ob = np.copy(ob)
 
