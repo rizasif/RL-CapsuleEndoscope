@@ -68,7 +68,7 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
         obs.append(state)
         ac, ac_dist, logp = policy.act(state)
         # print(type(ac))
-        assert(not np.array_equal(ac == last_ac))
+        assert(not np.array_equal(ac, last_ac))
         last_ac = ac
         acs.append(ac)
         ac_dists.append(ac_dist)
