@@ -58,7 +58,7 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
     ac_dists = []
     logps = []
     rewards = []
-    last_ac = []
+    last_ac = np.array([])
     for _ in range(max_pathlength):
         if animate:
             env.render()
@@ -66,7 +66,7 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
         state = np.array(init_ob)
         obs.append(state)
         ac, ac_dist, logp = policy.act(state)
-        print(type(ac))
+        # print(type(ac))
         assert(not ac == last_ac)
         last_ac = ac
         acs.append(ac)
