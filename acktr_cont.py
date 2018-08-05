@@ -4,7 +4,8 @@ from baselines import logger
 import baselines.common as common
 from baselines.common import tf_util as U
 from baselines.acktr import kfac
-from baselines.acktr.filters import ZFilter
+# from baselines.acktr.filters import ZFilter
+from baselines.common.filters import ZFilter
 import os
 import random
 import magroboenv.EnvUtils as Utils
