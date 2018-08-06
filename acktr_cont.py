@@ -46,8 +46,8 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
     """
     init_ob = env.reset()
     # prev_ob = np.float32(np.zeros(init_ob.shape))
-    zero_ob = [0.0 for _ in range(6)]
-    init_ob = zero_ob + init_ob[6:]
+    zero_ob = np.array([0.0 for _ in range(6)])
+    init_ob = np.concatenate((zero_ob, init_ob[6:]), axis=0)
     print("Intial Observation: ", init_ob)
 
     if not obfilter == None:
@@ -96,7 +96,7 @@ def rollout(env, policy, max_pathlength, animate=False, obfilter=None):
             new_goal_config[4] = incAngle(new_goal_config[4])
             percent_error, new_rew = Utils.calculate_reward(new_goal_config, slave_config, last_slave_config)
             # new_ob = slave_config + new_goal_config
-            new_ob = zero_ob + new_goal_config
+            new_ob = np.concatenate((zero_ob, new_goal_config), axis=0)
             if obfilter: new_ob = obfilter(new_ob)
             # new_state = np.concatenate([new_ob[:6], new_ob[6:]], -1)
             new_state = np.array(new_ob)
