@@ -12,7 +12,7 @@ class Config:
     PROBE_DIM = 1
 
     #Env diameter
-    ENV_DIM = 0.13
+    ENV_DIM = 0.05 #0.13
     
     # Orientation Configuration Parameters in millimeters
     X_MAX_VAL = ENV_DIM/2.0
