@@ -47,8 +47,8 @@ def train(num_timesteps, seed, env_name, fname):
         with tf.variable_scope("vf"):
             vf = NeuralNetValueFunction(ob_dim, ac_dim)
         with tf.variable_scope("pi"):
-            # policy = GaussianMlpPolicy(ob_dim, ac_dim)
-            policy = build_policy(env, "mlp")
+            policy = GaussianMlpPolicy(ob_dim, ac_dim)
+            # policy = build_policy(env, "mlp")
 
         try:
             learn(env, policy=policy, vf=vf,
