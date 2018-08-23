@@ -13,8 +13,7 @@ from baselines import bench
 
 from acktr_cont import learn
 
-# from policies import GaussianMlpPolicy
-from baselines.common.policies import build_policy
+from policies import GaussianMlpPolicy
 
 from baselines.acktr.value_functions import NeuralNetValueFunction
 
