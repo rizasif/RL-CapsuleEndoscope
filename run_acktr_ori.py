@@ -12,7 +12,10 @@ from baselines.common import tf_util as U
 from baselines import bench
 
 from acktr_cont import learn
-from policies import GaussianMlpPolicy
+
+# from policies import GaussianMlpPolicy
+from baselines.common.policies import build_policy
+
 from baselines.acktr.value_functions import NeuralNetValueFunction
 
 #from game_utils import *
@@ -45,7 +48,8 @@ def train(num_timesteps, seed, env_name, fname):
         with tf.variable_scope("vf"):
             vf = NeuralNetValueFunction(ob_dim, ac_dim)
         with tf.variable_scope("pi"):
-            policy = GaussianMlpPolicy(ob_dim, ac_dim)
+            # policy = GaussianMlpPolicy(ob_dim, ac_dim)
+            policy = build_policy(env, "mlp")
 
         try:
             learn(env, policy=policy, vf=vf,
