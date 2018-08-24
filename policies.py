@@ -16,9 +16,12 @@ class GaussianMlpPolicy(object):
         adv_n = tf.placeholder(tf.float32, shape=[None], name="adv") # advantage function estimate
         wd_dict = {}
        
-        h1 = tf.nn.elu(dense(ob_no, 64, "h1", weight_init=U.normc_initializer(1.0), bias_init=0.0, weight_loss_dict=wd_dict))
+        # h1 = tf.nn.elu(dense(ob_no, 64, "h1", weight_init=U.normc_initializer(1.0), bias_init=0.0, weight_loss_dict=wd_dict))
         # h2 = tf.nn.elu(dense(h1, 64, "h2", weight_init=U.normc_initializer(1.0), bias_init=0.0, weight_loss_dict=wd_dict))
-        mean_na = dense(h1, ac_dim, "mean", weight_init=U.normc_initializer(0.1), bias_init=0.0, weight_loss_dict=wd_dict) # Mean control output
+        # mean_na = dense(h1, ac_dim, "mean", weight_init=U.normc_initializer(0.1), bias_init=0.0, weight_loss_dict=wd_dict) # Mean control output
+
+        # only neuron
+        mean_na = dense(ob_no, ac_dim, "mean", weight_init=U.normc_initializer(0.1), bias_init=0.0, weight_loss_dict=wd_dict)
        
         self.wd_dict = wd_dict
         self.logstd_1a = logstd_1a = tf.get_variable("logstd", [ac_dim], tf.float32, tf.zeros_initializer()) # Variance on outputs
